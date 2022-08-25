@@ -12,4 +12,7 @@ class Converts extends Model
     public function pairs(){
         return $this->belongsToOne(Pairs::class);
     }
+    protected $fillable = [
+        'count_conversion'
+    ];
 }

@@ -76,7 +76,6 @@ class AdminConvertsController extends Controller
 
     public function convert($change, $currencyInit, $currencyDest)
     {
-        //return [$change, $currencyInit, $currencyDest];
 
         $pairs = Pairs::All();
         $currency = Currency::All();
@@ -86,49 +85,43 @@ class AdminConvertsController extends Controller
         $idDest = 0;
         $idPair = 0;
         $ratePair = 0.0;
-
-        //print($pairs[0]->id);
-
-        $response_pairs = response()->json($pairs);
-        //print($response_pairs);
-        $tab = [];
+        $convertPossible = false;
 
         foreach ($currency as $key => $valueCurrency) {
             if($valueCurrency->name == $currencyInit){
                 $idInit = $valueCurrency->id;
-
             }else if($valueCurrency->name == $currencyDest){
                 $idDest = $valueCurrency->id;
             }
         }
 
-        echo "init ".$idInit;
-        echo " => dest ".$idDest;
-        echo "<br/>";
-
-        // foreach ($pairs as $pair) {
-        //     echo ($pair . "\n");
-        //     foreach ($pairs as $key => $valuePair) {
-        //         echo $valuePair->id;
-        //         echo "<br/>";
-        //     }
-        // }
-
         for($i = 0; $i < count($pairs); $i++){
-            echo $pairs[$i];
-            echo "<br/>";
-            echo gettype($pairs[$i]);
-            echo "<br/>";
             foreach ((object) array($pairs[$i]) as $pair) {
-
                 if($pair->{'currency_init'} == $idInit && $pair->{'currency_dest'} == $idDest){
                     $idPair = $pair->{'id'};
                     $ratePair = $pair->{'rate'};
                     $convertChange = $ratePair * $change;
-                    return "Le change est de ".$convertChange;
+                    $convertPossible = true;
                 }
                 echo "<br/>";
             }
+        }
+
+        $convertArray = $convert;
+        for($j = 0; $j < count($convertArray); $j++){
+            foreach ((object) array($convertArray[$j]) as $converts) {
+                if($converts->{'id_pair'} == $idPair){
+                    $convert = Converts::findOrFail($converts->{'id'});
+                    $convert->count_conversion = $convert->count_conversion +1;
+                    $convert->save();
+                }
+            }
+        }
+
+        if($convertPossible){
+            return  $change." ".$currencyInit." = ".$convertChange." ".$currencyDest;
+        }else{
+            return "Désolé, la paire de conversion que vous avez choisi n'existe pas";
         }
 
     }

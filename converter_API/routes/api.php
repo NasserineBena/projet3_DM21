@@ -34,7 +34,4 @@ Route::apiResource("converts", AdminConvertsController::class)->except(['create'
 
 Route::get("converts/{change}/{currencyInit}/{currencyDest}", [AdminConvertsController::class, 'convert']);
 
-//Route::apiResource("converts/{change}/{currencyInit}/{currencyDest}", function ($change, $curencyInit, $curencyDest){
 
-
-// });
