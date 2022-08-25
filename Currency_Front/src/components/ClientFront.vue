@@ -23,49 +23,25 @@ export default {
   },
   data() {
     return {
-      selectInit: {
-        pairCurrencyInit: "",
+      selectPair: {
+        pairToConvert: "",
       },
-      selectDest: {
-        pairCurrencyDest: "",
-      },
+
       idPairConvert: 0,
       convertCount: 0,
       value: 0,
+      submitConvert: false,
     };
   },
   methods: {
-    onChange() {
-      console.log("ici");
-      //converts.foreach((converts) => {
-      // this.selectInit.pairInitEdit = data["data"].currency_init;
-      // this.selectDest.pairDestEdit = data["data"].currency_dest;
-      let currenciesFiltred = [];
-      console.log(this.pairs);
-      //   pairs.foreach((pair) => {
-      //     console.log(pair);
-      //     // if (pair.currency_init == this.selectInit.pairCurrencyInit) {
-      //     //   currency.foreach((currencyName) => {
-      //     //     if (pair.currency_dest == currencyName.id) {
-      //     //       currenciesFiltred.push(currencyName.name);
-      //     //     }
-      //     //   });
-      //     // }
-      //   });
-      console.log(currenciesFiltred);
-      for (var pair in this.pairs) {
-        // if (
-        //   pair.currency_init == this.selectInit.pairCurrencyInit &&
-        //   pair.currency_dest == this.selectDest.pairCurrencyDest
-        // ) {
-        //   this.dPairConvert = data["data"].id_pair;
-        // }
-        console.log(pair);
-      }
-
-      //});
-    },
     editConvertsCount() {
+      this.submitConvert = true;
+      console.log(this.selectPair.pairToConvert.split(" -> "));
+      console.log(this.pairs);
+      this.pairs.forEach((element) => {
+        console.log(element);
+      });
+      //let pairArray = this.selectPair.pairToConvert.split(" -> ");
       this.$emit("editConverts", this.convertCount++);
     },
   },
@@ -80,13 +56,10 @@ export default {
     <form class="ui form" @submit.prevent="editConvertsCount">
       <div class="fields">
         <div class="row">
-          <select
-            class="col-3"
-            v-model="selectInit.pairCurrencyInit"
-            @change="onChange()"
-          >
-            <option v-for="item in currency" v-bind:value="item.id">
-              {{ item.name }}
+          <select class="col-3" v-model="selectPair.pairToConvert">
+            <option v-for="item in pairs">
+              {{ item.substr(item.indexOf(",") + 1).split("=>")[0] }} ->
+              {{ item.substr(item.indexOf(",") + 1).split("=>")[1] }}
             </option>
           </select>
           <div class="col-3">
@@ -99,14 +72,11 @@ export default {
               v-model="value"
             />
           </div>
-          <select class="col-3" v-model="selectDest.pairCurrencyDest">
-            <option v-for="item in currenciesFiltred" v-bind:value="item.id">
-              {{ item }}
-            </option>
-          </select>
-
           <div class="two wide field">
             <button type="submit">submit</button>
+          </div>
+          <div v-if="submitConvert == true">
+            {{ value * 1.1 }}
           </div>
         </div>
       </div>

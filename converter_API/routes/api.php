@@ -7,6 +7,10 @@ use App\Http\Controllers\API\AdminPairsController;
 use App\Http\Controllers\API\AdminCurrencyController;
 use App\Http\Controllers\API\AdminConvertsController;
 
+use App\Models\Pairs;
+use App\Models\Currency;
+use App\Models\Converts;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,3 +31,10 @@ Route::apiResource("users", AdminUserController::class);
 Route::apiResource("currencies", AdminCurrencyController::class)->except(['create','edit','delete']);
 Route::apiResource("pairs", AdminPairsController::class)->except(['create','edit','delete']);
 Route::apiResource("converts", AdminConvertsController::class)->except(['create','edit']);
+
+Route::get("converts/{change}/{currencyInit}/{currencyDest}", [AdminConvertsController::class, 'convert']);
+
+//Route::apiResource("converts/{change}/{currencyInit}/{currencyDest}", function ($change, $curencyInit, $curencyDest){
+
+
+// });

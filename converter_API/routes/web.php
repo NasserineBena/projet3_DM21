@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Pairs;
+use App\Models\Currency;
+use App\Models\Converts;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,11 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
-//Route::get('/json', [App\Http\Controllers\AdminCurrencyController::class, 'index'])->name('json');
+

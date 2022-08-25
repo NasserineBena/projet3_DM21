@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Pairs;
 use App\Models\Currency;
+use App\Models\Converts;
 
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -43,6 +44,8 @@ class AdminPairsController extends Controller
 
         return $tab;
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -89,6 +92,8 @@ class AdminPairsController extends Controller
         $pair->save();
         return response()->json($request);
     }
+
+
 
     /**
      * Remove the specified resource from storage.
