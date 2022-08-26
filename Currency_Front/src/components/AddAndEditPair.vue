@@ -12,6 +12,9 @@ export default {
     pairs: {
       type: Array,
     },
+    converts: {
+      type: Array,
+    },
     urlPairs: {
       type: String,
     },
@@ -31,21 +34,78 @@ export default {
       },
       edit: false,
       idEdit: 0,
+      currencyNameInit: "",
+      currencyNameDest: "",
+      pairAlreadyExists: false,
+      pairInitDestSame: false,
+      rateNull: false,
     };
   },
   methods: {
     createPairs() {
       console.log(
         this.selectInit.pairCurrencyInit,
-        this.selectDest.pairCurrencyDest,
-        this.rate
+        this.selectDest.pairCurrencyDest
       );
-      this.$emit(
-        "createPairs",
-        this.selectInit.pairCurrencyInit,
-        this.selectDest.pairCurrencyDest,
-        this.rate
-      );
+      this.currency.forEach((currency) => {
+        if (currency.id == this.selectInit.pairCurrencyInit) {
+          this.currencyNameInit = currency.name;
+        }
+        if (currency.id == this.selectDest.pairCurrencyDest) {
+          this.currencyNameDest = currency.name;
+        }
+      });
+      this.pairs.forEach((pair) => {
+        pair = pair.split(", ")[1];
+        pair = pair.split(" => ");
+        // console.log(
+        //   pair[0] + " => " + this.currencyNameInit,
+        //   pair[0].length + " => " + this.currencyNameInit.length,
+        //   pair[1] + " => " + this.currencyNameDest,
+        //   pair[1].length + " => " + this.currencyNameDest.length
+        // );
+
+        if (
+          pair[0] == this.currencyNameInit &&
+          pair[1] == this.currencyNameDest
+        ) {
+          //console.log(pair[0], pair[1]);
+          this.pairAlreadyExists = true;
+          //console.log(this.pairAlreadyExists);
+        }
+        if (pair[0] == pair[1]) {
+          this.pairInitDestSame = true;
+        }
+      });
+      if (!this.pairAlreadyExists) {
+        if (!this.pairInitDestSame) {
+          if (this.rate > 0) {
+            this.$emit(
+              "createPairs",
+              this.selectInit.pairCurrencyInit,
+              this.selectDest.pairCurrencyDest,
+              this.rate
+            );
+            this.rateNull = false;
+            this.pairAlreadyExists = false;
+            this.this.pairInitDestSame = false;
+            console.log("la paire a bien été ajouté !");
+          } else {
+            this.rateNull = true;
+            console.log("le taux de change doit etre supérieur à 0");
+          }
+          this.this.pairInitDestSame = false;
+        } else {
+          this.pairAlreadyExists = false;
+          console.log(
+            "une paire ne peut pas avoir la meme devise de départ et d'arrivée"
+          );
+        }
+
+        this.pairAlreadyExists = false;
+      } else {
+        console.log("la paire existe déjà !");
+      }
     },
     getPairById(id) {
       axios.get(`${this.urlPairs}/${id}`).then((data) => {
@@ -73,6 +133,15 @@ export default {
     deletePair(id) {
       this.$emit("deletePair", id);
     },
+    getConvertByPairID(id) {
+      let countConvert = 0;
+      this.converts.forEach((convert) => {
+        if (convert.id_pair == id) {
+          countConvert = convert.count_conversion;
+        }
+      });
+      return countConvert;
+    },
   },
   created() {},
 };
@@ -82,6 +151,7 @@ export default {
   <h3>Toutes les paires disponibles</h3>
   <div v-for="item in pairs" class="row">
     <p>{{ item.substr(item.indexOf(",") + 1) }}</p>
+    <p>=> nombre de requetes : {{ getConvertByPairID(item.split(",")[0]) }}</p>
     <button @click="editChoose(item.split(',')[0])">Modifier</button>
     <button @click="deletePair(item.split(',')[0])">Supprimer</button>
     <br />
@@ -141,6 +211,19 @@ export default {
         </div>
       </div>
     </form>
+    <div v-if="this.pairAlreadyExists">
+      <p class="txtError">Désolé , cette paire existe déjà !</p>
+    </div>
+    <div v-if="this.rateNull">
+      <p class="txtError">
+        Désolé , le taux de change doit etre supérieur à 0!
+      </p>
+    </div>
+    <div v-if="this.pairInitDestSame">
+      <p class="txtError">
+        Une paire ne peut pas avoir la meme devise de départ et d'arrivée !
+      </p>
+    </div>
   </div>
 </template>
 
@@ -184,5 +267,8 @@ button {
 }
 .row {
   display: flex;
+}
+.txtError {
+  color: red;
 }
 </style>

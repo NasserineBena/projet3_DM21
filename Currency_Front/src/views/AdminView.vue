@@ -16,6 +16,9 @@ export default {
     pairs: {
       type: Array,
     },
+    converts: {
+      type: Array,
+    },
     urlCurrency: {
       type: String,
     },
@@ -148,6 +151,7 @@ export default {
   <AddAndEditPair
     :currency="currency"
     :pairs="pairs"
+    :converts="converts"
     :urlPairs="urlPairs"
     @createPairs="createPairs"
     @editPair="editPair"

@@ -36,6 +36,9 @@
         </div>
       </div>
     </form>
+    <div v-if="this.currencyExists">
+      <p class="txtError">Désolé , cette devise existe déja !</p>
+    </div>
   </div>
 </template>
 
@@ -64,12 +67,19 @@ export default {
       edit: false,
       idEdit: 0,
       currencyNameEdit: "",
+      currencyExists: false,
     };
   },
   methods: {
     createCurrency() {
       // window.console.log("customer list delete " + id);
-      if (this.currencyName != "") {
+
+      this.currency.forEach((element) => {
+        if (element.name == this.currencyName) {
+          this.currencyExists = true;
+        }
+      });
+      if (this.currencyName != "" && !this.currencyExists) {
         this.$emit("createCurrency", this.currencyName);
       }
     },
@@ -82,7 +92,6 @@ export default {
       axios.get(`${this.urlCurrency}/${id}`).then((data) => {
         this.currencyNameEdit = data["data"].name;
       });
-      console.log(this.currencyNameEdit);
     },
     editCurrency() {
       this.$emit("editCurrency", this.idEdit, this.currencyNameEdit);
@@ -136,5 +145,8 @@ button {
 }
 .row {
   display: flex;
+}
+.txtError {
+  color: red;
 }
 </style>
