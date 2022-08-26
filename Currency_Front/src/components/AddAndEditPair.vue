@@ -225,6 +225,11 @@ export default {
       </p>
     </div>
   </div>
+  <div>
+    <span
+      >Si la devise que vous cherchez n'existe pas , vous pouvez la créer</span
+    ><a href="/admin/currencies">ici</a>
+  </div>
 </template>
 
 <style scoped>

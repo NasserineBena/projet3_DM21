@@ -17,6 +17,16 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/AdminView.vue"),
     },
+    {
+      path: "/admin/currencies",
+      name: "currencies",
+      component: () => import("../views/CurrenciesView.vue"),
+    },
+    {
+      path: "/admin/pairs",
+      name: "pairs",
+      component: () => import("../views/PairsView.vue"),
+    },
   ],
 });
 
