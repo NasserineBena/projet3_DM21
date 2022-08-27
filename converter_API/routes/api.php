@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AdminUserController;
 use App\Http\Controllers\API\AdminPairsController;
 use App\Http\Controllers\API\AdminCurrencyController;
 use App\Http\Controllers\API\AdminConvertsController;
+use App\Http\Controllers\LoginController;
 
 use App\Models\Pairs;
 use App\Models\Currency;
@@ -22,16 +23,24 @@ use App\Models\Converts;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::apiResource("users", AdminUserController::class);
 
 Route::apiResource("currencies", AdminCurrencyController::class)->except(['create','edit','delete']);
 Route::apiResource("pairs", AdminPairsController::class)->except(['create','edit','delete']);
 Route::apiResource("converts", AdminConvertsController::class)->except(['create','edit']);
 
 Route::get("converts/{change}/{currencyInit}/{currencyDest}", [AdminConvertsController::class, 'convert']);
+
+Route::middleware('auth:sanctum')->group(function (){
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('logout', [
+        LoginController::class, 'logout'
+    ]);
+});
+
+Route::controller(LoginController::class)->group(function(){
+    Route::post('login', 'login');
+});
 
 

@@ -36,13 +36,16 @@ export default {
       idEdit: 0,
       currencyNameInit: "",
       currencyNameDest: "",
-      pairAlreadyExists: false,
-      pairInitDestSame: false,
-      rateNull: false,
+      messageError: "",
+      messageSuccess: "",
     };
   },
   methods: {
     createPairs() {
+      this.messageError = "";
+      this.messageSuccess = "";
+      let pairAlreadyExists = false;
+      let pairInitDestSame = false;
       console.log(
         this.selectInit.pairCurrencyInit,
         this.selectDest.pairCurrencyDest
@@ -58,53 +61,40 @@ export default {
       this.pairs.forEach((pair) => {
         pair = pair.split(", ")[1];
         pair = pair.split(" => ");
-        // console.log(
-        //   pair[0] + " => " + this.currencyNameInit,
-        //   pair[0].length + " => " + this.currencyNameInit.length,
-        //   pair[1] + " => " + this.currencyNameDest,
-        //   pair[1].length + " => " + this.currencyNameDest.length
-        // );
-
         if (
           pair[0] == this.currencyNameInit &&
           pair[1] == this.currencyNameDest
         ) {
-          //console.log(pair[0], pair[1]);
-          this.pairAlreadyExists = true;
-          //console.log(this.pairAlreadyExists);
+          pairAlreadyExists = true;
         }
-        if (pair[0] == pair[1]) {
-          this.pairInitDestSame = true;
+        console.log(pair[0], pair[1]);
+        if (this.currencyNameInit == this.currencyNameDest) {
+          pairInitDestSame = true;
+          console.log(this.pairInitDestSame);
         }
       });
-      if (!this.pairAlreadyExists) {
-        if (!this.pairInitDestSame) {
+      if (!pairAlreadyExists) {
+        console.log(pairAlreadyExists);
+        if (!pairInitDestSame) {
+          console.log(pairInitDestSame);
           if (this.rate > 0) {
+            console.log(this.rate);
             this.$emit(
               "createPairs",
               this.selectInit.pairCurrencyInit,
               this.selectDest.pairCurrencyDest,
               this.rate
             );
-            this.rateNull = false;
-            this.pairAlreadyExists = false;
-            this.this.pairInitDestSame = false;
-            console.log("la paire a bien été ajouté !");
+            this.messageSuccess = "la paire a bien été ajouté !";
           } else {
-            this.rateNull = true;
-            console.log("le taux de change doit etre supérieur à 0");
+            this.messageError = "le taux de change doit etre supérieur à 0";
           }
-          this.this.pairInitDestSame = false;
         } else {
-          this.pairAlreadyExists = false;
-          console.log(
-            "une paire ne peut pas avoir la meme devise de départ et d'arrivée"
-          );
+          this.messageError =
+            "une paire ne peut pas avoir la meme devise de départ et d'arrivée";
         }
-
-        this.pairAlreadyExists = false;
       } else {
-        console.log("la paire existe déjà !");
+        this.messageError = "la paire existe déjà !";
       }
     },
     getPairById(id) {
@@ -130,8 +120,24 @@ export default {
       );
       this.edit = false;
     },
-    deletePair(id) {
+    deletePair(id, init, dest) {
+      console.log(id, init, dest);
+      let idReverseToDelete = 0;
+      this.pairs.forEach((pair) => {
+        let id_pair = pair.split(",")[0];
+        console.log(id_pair);
+        pair = pair.split(", ")[1];
+        pair = pair.split(" => ");
+        console.log(pair[0] + " => " + dest, pair[1] + " => " + init);
+        if (pair[0] == dest && pair[1] == init) {
+          idReverseToDelete = id_pair;
+          console.log(idReverseToDelete);
+        }
+      });
       this.$emit("deletePair", id);
+      if (idReverseToDelete > 0) {
+        this.$emit("deletePair", idReverseToDelete);
+      }
     },
     getConvertByPairID(id) {
       let countConvert = 0;
@@ -148,12 +154,27 @@ export default {
 </script>
 
 <template>
+  <div>
+    <span
+      >Si la devise que vous cherchez n'existe pas , vous pouvez la créer </span
+    ><a href="/admin/currencies">ici</a>
+  </div>
   <h3>Toutes les paires disponibles</h3>
   <div v-for="item in pairs" class="row">
     <p>{{ item.substr(item.indexOf(",") + 1) }}</p>
     <p>=> nombre de requetes : {{ getConvertByPairID(item.split(",")[0]) }}</p>
     <button @click="editChoose(item.split(',')[0])">Modifier</button>
-    <button @click="deletePair(item.split(',')[0])">Supprimer</button>
+    <button
+      @click="
+        deletePair(
+          item.split(',')[0],
+          item.split(', ')[1].split(' => ')[0],
+          item.split(', ')[1].split(' => ')[1]
+        )
+      "
+    >
+      Supprimer
+    </button>
     <br />
     <div v-if="edit == true && idEdit == item.split(',')[0]">
       <br />
@@ -211,24 +232,8 @@ export default {
         </div>
       </div>
     </form>
-    <div v-if="this.pairAlreadyExists">
-      <p class="txtError">Désolé , cette paire existe déjà !</p>
-    </div>
-    <div v-if="this.rateNull">
-      <p class="txtError">
-        Désolé , le taux de change doit etre supérieur à 0!
-      </p>
-    </div>
-    <div v-if="this.pairInitDestSame">
-      <p class="txtError">
-        Une paire ne peut pas avoir la meme devise de départ et d'arrivée !
-      </p>
-    </div>
-  </div>
-  <div>
-    <span
-      >Si la devise que vous cherchez n'existe pas , vous pouvez la créer</span
-    ><a href="/admin/currencies">ici</a>
+    <p class="txtError">{{ messageError }}</p>
+    <p class="txtSuccess">{{ messageSuccess }}</p>
   </div>
 </template>
 
@@ -275,5 +280,8 @@ button {
 }
 .txtError {
   color: red;
+}
+.txtSuccess {
+  color: green;
 }
 </style>

@@ -1,10 +1,12 @@
 <script>
 import axios from "axios";
 import AddAndEditPair from "@/components/AddAndEditPair.vue";
+import Header from "@/components/Header.vue";
 
 export default {
   components: {
     AddAndEditPair,
+    Header,
   },
   emits: ["getCurrency", "getPairs"],
   props: {
@@ -120,6 +122,7 @@ export default {
 };
 </script>
 <template>
+  <Header />
   <AddAndEditPair
     :currency="currency"
     :pairs="pairs"
