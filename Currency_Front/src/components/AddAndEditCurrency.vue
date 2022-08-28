@@ -1,4 +1,26 @@
 <template>
+  <div class="my-form">
+    <h3>Ajouter une nouvelle devise</h3>
+    <form @submit.prevent="createCurrency">
+      <div class="row">
+        <div class="row">
+          <label class="margin self-center">Devise: </label> <br />
+          <input
+            type="text"
+            minlength="3"
+            maxLength="3"
+            name="currency_name"
+            placeholder="Nom de la devise"
+            v-model="currencyName"
+            class="margin"
+          />
+        </div>
+        <div class="buttonSubmi">
+          <button type="submit">Envoyer</button>
+        </div>
+      </div>
+    </form>
+  </div>
   <div class="data">
     <h3>Modifier les devises</h3>
     <div v-for="item in currency" v-bind:value="item.id" class="row">
@@ -21,27 +43,6 @@
         </form>
       </div>
     </div>
-  </div>
-  <div class="my-form">
-    <h3>Ajouter une nouvelle devise</h3>
-    <form @submit.prevent="createCurrency">
-      <div>
-        <div>
-          <label>Nom de la devise</label> <br />
-          <input
-            type="text"
-            minlength="3"
-            maxLength="3"
-            name="currency_name"
-            placeholder="currency_name"
-            v-model="currencyName"
-          />
-        </div>
-        <div class="buttonSubmi">
-          <button type="submit">Envoyer</button>
-        </div>
-      </div>
-    </form>
   </div>
 </template>
 
@@ -169,5 +170,12 @@ p {
 }
 .buttonDelete {
   color: red;
+}
+.margin {
+  margin-right: 10px;
+}
+.self-center {
+  display: flex;
+  align-self: center;
 }
 </style>

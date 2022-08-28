@@ -12,17 +12,6 @@ const router = createRouter({
       },
     },
     {
-      path: "/admin",
-      name: "admin",
-      component: () => import("../views/AdminView.vue"),
-      // beforeEnter: checkLogin,
-      beforeEnter() {
-        if (localStorage.getItem("access_token") == null) {
-          return { path: "/login" };
-        }
-      },
-    },
-    {
       path: "/login",
       name: "login",
       component: LoginView,

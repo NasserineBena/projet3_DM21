@@ -42,7 +42,7 @@ export default {
             if (data["message"] == "User login successfully.") {
               localStorage.setItem("access_token", data["data"]["token"]);
               localStorage.setItem("nameAdmin", data["data"]["name"]);
-              this.$router.push("/admin");
+              this.$router.push("/admin/currencies");
             }
           })
           .catch((error) => {

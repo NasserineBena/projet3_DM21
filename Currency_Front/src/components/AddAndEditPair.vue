@@ -154,10 +154,43 @@ export default {
 </script>
 
 <template>
-  <div>
-    <span
-      >Si la devise que vous cherchez n'existe pas , vous pouvez la créer </span
-    ><a href="/admin/currencies">ici</a>
+  <div class="my-form">
+    <h3>Ajouter une nouvelle paire</h3>
+    <form class="ui form" @submit.prevent="createPairs">
+      <div class="fields">
+        <div class="row">
+          <select class="col-3" v-model="selectInit.pairCurrencyInit">
+            <option v-for="item in currency" v-bind:value="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+          <div class="col-3 transfert">-></div>
+          <select class="col-3" v-model="selectDest.pairCurrencyDest">
+            <option v-for="item in currency" v-bind:value="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+          <input
+            class="col-3"
+            type="number"
+            step="0.01"
+            name="value"
+            placeholder="Taux de conversion"
+            v-model="rate"
+          />
+          <div class="two wide field">
+            <button type="submit">Envoyer</button>
+          </div>
+        </div>
+        <p class="txtError">{{ messageError }}</p>
+        <p class="txtSuccess">{{ messageSuccess }}</p>
+        <h4>
+          <span
+            >Si la devise que vous cherchez n'existe pas , vous pouvez la créer </span
+          ><a href="/admin/currencies">ici</a>
+        </h4>
+      </div>
+    </form>
   </div>
   <h3>Toutes les paires disponibles</h3>
   <div v-for="item in pairs" class="row">
@@ -204,39 +237,6 @@ export default {
         <button type="submit">submit</button>
       </form>
     </div>
-  </div>
-  <div class="my-form">
-    <h3>Ajouter une nouvelle paire</h3>
-    <form class="ui form" @submit.prevent="createPairs">
-      <div class="fields">
-        <div class="row">
-          <select class="col-3" v-model="selectInit.pairCurrencyInit">
-            <option v-for="item in currency" v-bind:value="item.id">
-              {{ item.name }}
-            </option>
-          </select>
-          <div class="col-3 transfert">-></div>
-          <select class="col-3" v-model="selectDest.pairCurrencyDest">
-            <option v-for="item in currency" v-bind:value="item.id">
-              {{ item.name }}
-            </option>
-          </select>
-          <input
-            class="col-3"
-            type="number"
-            step="0.01"
-            name="value"
-            placeholder="Taux de conversion"
-            v-model="rate"
-          />
-          <div class="two wide field">
-            <button type="submit">submit</button>
-          </div>
-        </div>
-      </div>
-    </form>
-    <p class="txtError">{{ messageError }}</p>
-    <p class="txtSuccess">{{ messageSuccess }}</p>
   </div>
 </template>
 
@@ -299,5 +299,17 @@ p {
 }
 .buttonDelete {
   color: red;
+}
+h3 {
+  font-size: 25px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  color: #493936;
+}
+h4 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  color: #57606f;
 }
 </style>

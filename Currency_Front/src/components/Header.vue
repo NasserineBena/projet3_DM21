@@ -9,7 +9,7 @@
         Paire
       </p>
       <p class="cursor-pointer buttonLogout" v-on:click.prevent="logout">
-        Logout
+        Se déconnecter
       </p>
     </div>
   </div>
@@ -41,6 +41,7 @@ export default {
 }
 .logo {
   font-size: 40px;
+  cursor: pointer;
 }
 .display {
   display: flex;
@@ -50,7 +51,6 @@ export default {
 }
 .cursor-pointer {
   cursor: pointer;
-
   margin-right: 10px;
   border-radius: 10px;
 }

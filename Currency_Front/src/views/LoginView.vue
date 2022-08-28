@@ -43,7 +43,7 @@ export default {
             </div>
             <div class="buttonCenter">
               <button type="submit" class="buttonConnexion">
-                Me connecter
+                Se connecter
               </button>
             </div>
           </div>
