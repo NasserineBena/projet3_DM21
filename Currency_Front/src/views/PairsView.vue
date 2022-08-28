@@ -88,12 +88,10 @@ export default {
           alert(e);
         });
     },
-    editPair(id, pairInitEdit, pairDestEdit, rateEdit) {
-      console.log(id, pairInitEdit, pairDestEdit, rateEdit);
+    editPair(id, rateEdit) {
+      console.log(id, rateEdit);
       axios
         .put(`${this.urlPairs}/${id}`, {
-          currency_init: pairInitEdit,
-          currency_dest: pairDestEdit,
           rate: rateEdit,
         })
         .then(() => {

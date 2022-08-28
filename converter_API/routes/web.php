@@ -5,6 +5,8 @@ use App\Models\Pairs;
 use App\Models\Currency;
 use App\Models\Converts;
 
+use App\Http\Controllers\API\AdminCurrencyController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,4 +20,8 @@ use App\Models\Converts;
 
 Auth::routes();
 
+
+Route::get('/', function () {
+    return redirect('/api/currencies');
+});
 

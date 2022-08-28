@@ -87,6 +87,8 @@ class AdminConvertsController extends Controller
         $ratePair = 0.0;
         $convertPossible = false;
 
+        // Je récupère ici l'id de la devise de départ et d'arrivée qui se trouvent dans l'url
+
         foreach ($currency as $key => $valueCurrency) {
             if($valueCurrency->name == $currencyInit){
                 $idInit = $valueCurrency->id;
@@ -94,6 +96,9 @@ class AdminConvertsController extends Controller
                 $idDest = $valueCurrency->id;
             }
         }
+
+        //  Je parcours mon tableau de paires pour récupérer l'id de la paire et le taux de change avec
+        // devise de départ = $currencyInit et devise d'arrivée = $currencyDest
 
         for($i = 0; $i < count($pairs); $i++){
             foreach ((object) array($pairs[$i]) as $pair) {
@@ -108,6 +113,11 @@ class AdminConvertsController extends Controller
         }
 
         $convertArray = $convert;
+
+        //  Je parcours mon tableau de conversions à fin de récupérer l'id de la conversion
+        //  et le nombre de conversion de cette paire
+        //  qui a son id_pair = id de la paire recherchée dans l'url
+
         for($j = 0; $j < count($convertArray); $j++){
             foreach ((object) array($convertArray[$j]) as $converts) {
                 if($converts->{'id_pair'} == $idPair){
@@ -118,6 +128,8 @@ class AdminConvertsController extends Controller
             }
         }
 
+        //  Si la conversion est possible
+        //  alors on fait la conversion
         if($convertPossible){
             return  $change." ".$currencyInit." = ".$convertChange." ".$currencyDest;
         }else{

@@ -111,13 +111,7 @@ export default {
       this.getPairById(this.idEdit);
     },
     editPair() {
-      this.$emit(
-        "editPair",
-        this.idEdit,
-        this.selectInit.pairInitEdit,
-        this.selectDest.pairDestEdit,
-        this.rateEdit
-      );
+      this.$emit("editPair", this.idEdit, this.rateEdit);
       this.edit = false;
     },
     deletePair(id, init, dest) {
@@ -215,17 +209,6 @@ export default {
     <div v-if="edit == true && idEdit == item.split(',')[0]">
       <br />
       <form @submit.prevent="editPair">
-        <select class="col-3" v-model="selectInit.pairInitEdit">
-          <option v-for="item in currency" v-bind:value="item.id">
-            {{ item.name }}
-          </option>
-        </select>
-        <div class="col-3 transfert">-></div>
-        <select class="col-3" v-model="selectDest.pairDestEdit">
-          <option v-for="item in currency" v-bind:value="item.id">
-            {{ item.name }}
-          </option>
-        </select>
         <input
           class="col-3"
           type="number"
@@ -234,7 +217,7 @@ export default {
           placeholder="Taux de conversion"
           v-model="rateEdit"
         />
-        <button type="submit">submit</button>
+        <button type="submit">Envoyer</button>
       </form>
     </div>
   </div>

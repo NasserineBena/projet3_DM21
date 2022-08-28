@@ -21,7 +21,7 @@ class AdminCurrencyController extends Controller
     {
         $currencies = Currency::all();
 
-        // On retourne les informations des utilisateurs en JSON
+        // On retourne les informations des devises en JSON
         return response()->json($currencies);
     }
 

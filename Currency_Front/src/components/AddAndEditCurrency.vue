@@ -31,7 +31,7 @@
       </button>
       <div v-if="edit == true && idEdit == item.id">
         <form @submit.prevent="editCurrency">
-          <label>Name de devise</label>
+          <label>Nom de la devise</label>
           <input
             type="text"
             minlength="3"
@@ -39,7 +39,7 @@
             name="currency_name_edit"
             v-model="currencyNameEdit"
           />
-          <button type="submit">submit</button>
+          <button type="submit">Envoyer</button>
         </form>
       </div>
     </div>
@@ -75,7 +75,6 @@ export default {
   },
   methods: {
     createCurrency() {
-      // window.console.log("customer list delete " + id);
       if (this.currencyName != "") {
         this.$emit("createCurrency", this.currencyName);
       }

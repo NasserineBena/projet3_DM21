@@ -24,7 +24,12 @@ class AdminPairsController extends Controller
         $pairs = Pairs::All();
         $currency = Currency::All();
 
+        //  $response_pairs stock les informations de pairs en json mais comme je voulais stocker les noms des devises au lieu des id
+        //  j'ai donc décidé de stocker les information de mes paires dans un tableau $tab
+        //  j'aurai pu stocker mes nouvelles informations sous forme de json mais j'étais déjà très avancée quand je m'en suis rendue compte
+
         $response_pairs = response()->json($pairs);
+
         $tab = [];
 
         foreach ($pairs as $key => $valuePairs) {
@@ -86,8 +91,6 @@ class AdminPairsController extends Controller
     public function update(Request $request, $id)
     {
         $pair = Pairs::findOrFail($id);
-        $pair->currency_init = $request->currency_init;
-        $pair->currency_dest = $request->currency_dest;
         $pair->rate = $request->rate;
         $pair->save();
         return response()->json($request);
