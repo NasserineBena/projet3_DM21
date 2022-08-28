@@ -2,13 +2,14 @@
 import axios from "axios";
 import AddAndEditPair from "@/components/AddAndEditPair.vue";
 import AddAndEditCurrency from "@/components/AddAndEditCurrency.vue";
-
+import Header from "@/components/Header.vue";
 export default {
   components: {
     AddAndEditPair,
     AddAndEditCurrency,
+    Header,
   },
-  emits: ["getCurrency", "getPairs"],
+  emits: ["getCurrency", "getPairs", "getConverts", "connexion", "logout"],
   props: {
     currency: {
       type: Array,
@@ -143,25 +144,42 @@ export default {
           alert(e);
         });
     },
+    logout() {
+      this.$emit("logout");
+    },
   },
   created() {},
 };
 </script>
 <template>
-  <AddAndEditPair
-    :currency="currency"
-    :pairs="pairs"
-    :converts="converts"
-    :urlPairs="urlPairs"
-    @createPairs="createPairs"
-    @editPair="editPair"
-    @deletePair="deletePair"
-  />
-  <AddAndEditCurrency
-    :currency="currency"
-    :urlCurrency="urlCurrency"
-    @createCurrency="createCurrency"
-    @editCurrency="editCurrency"
-    @deleteCurrency="deleteCurrency"
-  />
+  <Header @logout="logout" />
+  <div class="body">
+    <div>
+      <AddAndEditPair
+        :currency="currency"
+        :pairs="pairs"
+        :converts="converts"
+        :urlPairs="urlPairs"
+        @createPairs="createPairs"
+        @editPair="editPair"
+        @deletePair="deletePair"
+      />
+      <AddAndEditCurrency
+        :currency="currency"
+        :urlCurrency="urlCurrency"
+        @createCurrency="createCurrency"
+        @editCurrency="editCurrency"
+        @deleteCurrency="deleteCurrency"
+      />
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+</style>

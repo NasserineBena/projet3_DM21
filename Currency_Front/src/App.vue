@@ -30,52 +30,43 @@ export default {
       });
     },
     connexion(email, password) {
-      console.log(email, password);
-      axios
-        .post("http://127.0.0.1:8000/api/login", {
-          email: email,
-          password: password,
-        })
-        .then(({ data }) => {
-          if (data["message"] == "User login successfully.") {
-            console.log(data["data"]["token"]);
-            // localStorage.setItem("acces_token", data["data"]["token"].split("")[1]);
-            localStorage.setItem("access_token", data["data"]["token"]);
-            localStorage.setItem("nameAdmin", data["data"]["name"]);
-            this.$router.push("/admin");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    logout() {
-      // const config = {
-      //       method: 'post',
-      //       url: 'http://127.0.0.1:8000/api/logout',
-      //       headers: {
-      //           'Authorization': 'basic T64Mdy7m['
-      //       }
-      //   };
-      let token = localStorage.getItem("access_token");
-      // console.log(`Bearer ${token}`);
-      console.log({
-        Authorization: "Bearer " + token,
-      }),
+      if (password == "" || email == "") {
+        window.alert("Mot de passe et/ou email ne doivent pas être vides!");
+      } else {
         axios
-          .post("http://127.0.0.1:8000/api/logout", null, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
+          .post("http://127.0.0.1:8000/api/login", {
+            email: email,
+            password: password,
           })
           .then(({ data }) => {
-            localStorage.removeItem("nameAdmin");
-            localStorage.removeItem("access_token");
+            if (data["message"] == "User login successfully.") {
+              localStorage.setItem("access_token", data["data"]["token"]);
+              localStorage.setItem("nameAdmin", data["data"]["name"]);
+              this.$router.push("/admin");
+            }
           })
           .catch((error) => {
-            console.log(error);
+            window.alert("Mot de passe et/ou email incorrect!");
           });
+      }
+    },
+    logout() {
+      let token = localStorage.getItem("access_token");
+      axios
+        .post("http://127.0.0.1:8000/api/logout", null, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then(({ data }) => {
+          this.$router.push("/login");
+          localStorage.removeItem("nameAdmin");
+          localStorage.removeItem("access_token");
+        })
+        .catch((error) => {
+          window.alert("Vous ne pouvez pas vous déconnecter ");
+        });
     },
   },
   created() {

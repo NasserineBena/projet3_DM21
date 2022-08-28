@@ -163,8 +163,11 @@ export default {
   <div v-for="item in pairs" class="row">
     <p>{{ item.substr(item.indexOf(",") + 1) }}</p>
     <p>=> nombre de requetes : {{ getConvertByPairID(item.split(",")[0]) }}</p>
-    <button @click="editChoose(item.split(',')[0])">Modifier</button>
+    <button @click="editChoose(item.split(',')[0])" class="button">
+      Modifier
+    </button>
     <button
+      class="buttonDelete"
       @click="
         deletePair(
           item.split(',')[0],
@@ -184,7 +187,7 @@ export default {
             {{ item.name }}
           </option>
         </select>
-        <div class="col-3">-></div>
+        <div class="col-3 transfert">-></div>
         <select class="col-3" v-model="selectDest.pairDestEdit">
           <option v-for="item in currency" v-bind:value="item.id">
             {{ item.name }}
@@ -212,7 +215,7 @@ export default {
               {{ item.name }}
             </option>
           </select>
-          <div class="col-3">-></div>
+          <div class="col-3 transfert">-></div>
           <select class="col-3" v-model="selectDest.pairCurrencyDest">
             <option v-for="item in currency" v-bind:value="item.id">
               {{ item.name }}
@@ -253,6 +256,9 @@ body {
   color: #b9b9b9;
   background-color: #e3e3e3;
 }
+.transfert {
+  margin: 10px;
+}
 input,
 button {
   width: fit_content;
@@ -272,16 +278,26 @@ input:focus {
   outline: 0;
   border-color: #64ac15;
 }
+input,
 button {
   cursor: pointer;
+  border-radius: 10px;
+  margin-left: 10px;
 }
 .row {
   display: flex;
+  margin-top: 10px;
 }
 .txtError {
   color: red;
 }
 .txtSuccess {
   color: green;
+}
+p {
+  margin-top: 10px;
+}
+.buttonDelete {
+  color: red;
 }
 </style>

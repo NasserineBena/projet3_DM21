@@ -8,7 +8,7 @@ export default {
     AddAndEditPair,
     Header,
   },
-  emits: ["getCurrency", "getPairs"],
+  emits: ["getCurrency", "getPairs", "getConverts", "connexion", "logout"],
   props: {
     currency: {
       type: Array,
@@ -117,19 +117,34 @@ export default {
           alert(e);
         });
     },
+    logout() {
+      this.$emit("logout");
+    },
   },
   created() {},
 };
 </script>
 <template>
-  <Header />
-  <AddAndEditPair
-    :currency="currency"
-    :pairs="pairs"
-    :converts="converts"
-    :urlPairs="urlPairs"
-    @createPairs="createPairs"
-    @editPair="editPair"
-    @deletePair="deletePair"
-  />
+  <Header @logout="logout" />
+  <div class="body">
+    <div>
+      <AddAndEditPair
+        :currency="currency"
+        :pairs="pairs"
+        :converts="converts"
+        :urlPairs="urlPairs"
+        @createPairs="createPairs"
+        @editPair="editPair"
+        @deletePair="deletePair"
+      />
+    </div>
+  </div>
 </template>
+<style scoped>
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+</style>
